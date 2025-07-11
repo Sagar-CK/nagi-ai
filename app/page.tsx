@@ -21,8 +21,7 @@ export default function HomePage() {
   })
 
   // Countdown to a future date (30 days from now for demo)
-  const targetDate = new Date()
-  targetDate.setDate(targetDate.getDate() + 30)
+  const targetDate = new Date(2025, 6, 24)
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -77,7 +76,7 @@ export default function HomePage() {
         <div className="relative flex flex-col items-center justify-center w-full max-w-2xl min-h-[60vh] sm:min-h-[70vh] md:min-h-[80vh] mx-auto">
           {/* Flower ASCII Art as background */}
           <pre
-            className="absolute inset-0 flex flex-col justify-center items-center w-full h-full text-[8px] xs:text-xs sm:text-base md:text-lg leading-3 sm:leading-4 text-pink-400 font-mono whitespace-pre mt-8 sm:mt-10 opacity-80 pointer-events-none select-none z-0"
+            className="absolute inset-0 flex flex-col justify-center items-center w-full h-full text-[8px] xs:text-xs sm:text-base md:text-lg leading-3 sm:leading-4 text-pink-400 font-bold whitespace-pre mt-8 sm:mt-10 opacity-80 pointer-events-none select-none z-0"
             aria-hidden="true"
           >
             {`
@@ -108,7 +107,7 @@ export default function HomePage() {
 ⠀⠀⠀⢀⠞⠁⢀⠞⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⢀⣴⣫⠤⠖⠋                                                       
  `}
-            <span className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl leading-none block bounce-arrow">↓</span>
+            <span className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl leading-none block bounce-arrow font-light">↓</span>
           </pre>
           {/* Deep radial blur background behind heading and subtitle */}
           <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[220px] h-[220px] xs:w-[320px] xs:h-[320px] sm:w-[500px] sm:h-[500px] md:w-[700px] md:h-[700px] pointer-events-none z-10" style={{ background: 'radial-gradient(circle, rgba(236,72,153,0.35) 0%, rgba(255,255,255,0) 55%)', filter: 'blur(60px)' }} />
