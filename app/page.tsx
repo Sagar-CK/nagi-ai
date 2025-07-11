@@ -141,9 +141,9 @@ export default function HomePage() {
           <p className="text-sm text-gray-600 mb-4">early access is limited. don’t miss out on the next big thing in ai.</p>
           {isSubmitted ? (
             <div className="bg-white rounded-lg p-6 border border-pink-200">
-              <div className="text-pink-400 mb-2 text-3xl">✓</div>
+              <div className="text-pink-400 mb-2 text-lg">🤘</div>
               <h3 className="text-xs font-semibold mb-1">welcome to the journey</h3>
-              <p className="text-gray-600">we&apos;ll be in touch soon</p>
+              <p className="text-xs text-gray-600">we&apos;ll be in touch soon</p>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-3">
