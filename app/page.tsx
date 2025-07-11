@@ -142,9 +142,9 @@ export default function HomePage() {
         <div className="max-w-md mx-auto text-center">
           <h2 className="text-xl font-semibold mb-4">hyped by vcs at</h2>
           <div className="flex flex-row justify-center items-center gap-8">
-            <Image src="/ef.webp" alt="Entrepreneur First" width={50} height={50} className="h-8 w-auto object-contain grayscale hover:grayscale-0 transition duration-500 ease-in-out" />
-            <Image src="/projecteurope.jpg" alt="Project Europe" width={50} height={50} className="h-8 w-auto object-contain grayscale hover:grayscale-0 transition duration-500 ease-in-out" />
-            <Image src="/yc.png" alt="Y Combinator" width={50} height={50} className="h-8 w-auto object-contain grayscale hover:grayscale-0 transition duration-500 ease-in-out" />
+            <Image src="/ef.webp" alt="Entrepreneur First" width={50} height={50} className="h-8 w-auto object-contain grayscale hover:grayscale-0 transition duration-300 ease-in-out" />
+            <Image src="/projecteurope.jpg" alt="Project Europe" width={50} height={50} className="h-8 w-auto object-contain grayscale hover:grayscale-0 transition duration-300 ease-in-out" />
+            <Image src="/yc.png" alt="Y Combinator" width={50} height={50} className="h-8 w-auto object-contain grayscale hover:grayscale-0 transition duration-300 ease-in-out" />
           </div>
         </div>
       </section>
