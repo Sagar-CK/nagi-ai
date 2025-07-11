@@ -19,6 +19,7 @@ export default function HomePage() {
     minutes: 0,
     seconds: 0,
   })
+  const [errorMessage, setErrorMessage] = useState("")
 
   // Countdown to a future date (30 days from now for demo)
   const targetDate = new Date(2025, 6, 24)
@@ -43,12 +44,29 @@ export default function HomePage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
+    setErrorMessage("")
     try {
       const { error } = await supabase.from("waitlist").insert([{ email, created_at: new Date().toISOString() }])
       if (error) throw error
       setIsSubmitted(true)
       setEmail("")
-    } catch (error) {
+    } catch (error: unknown) {
+      let code = undefined;
+      let message = "";
+      if (typeof error === "object" && error !== null) {
+        // @ts-expect-error: supabase error shape
+        code = error.code;
+        // @ts-expect-error: supabase error shape
+        message = error.message;
+      }
+      if (
+        code === "23505" ||
+        (typeof message === "string" && message.toLowerCase().includes("duplicate"))
+      ) {
+        setErrorMessage("You are already signed up! 🤘")
+      } else {
+        setErrorMessage("Something went wrong. Please try again later.")
+      }
       console.error("Error:", error)
     } finally {
       setIsSubmitting(false)
@@ -76,15 +94,13 @@ export default function HomePage() {
         <div className="relative flex flex-col items-center justify-center w-full max-w-2xl min-h-[60vh] sm:min-h-[70vh] md:min-h-[80vh] mx-auto">
           {/* Flower ASCII Art as background */}
           <pre
-            className="absolute inset-0 flex flex-col justify-center items-center w-full h-full text-[8px] xs:text-xs sm:text-base md:text-lg leading-3 sm:leading-4 text-pink-400 font-bold whitespace-pre mt-8 sm:mt-10 opacity-80 pointer-events-none select-none z-0"
+            className="absolute inset-0 flex flex-col justify-center items-center w-full h-full text-[8px] xs:text-xs sm:text-base md:text-lg leading-3 sm:leading-4 text-pink-400 whitespace-pre mt-8 sm:mt-10 opacity-80 pointer-events-none select-none z-0"
             aria-hidden="true"
           >
             {`
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⡤⠒⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⠖⠋⠀⠀⠀⢻⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⢴⠾⠑⢦⡞⠃⠀⠀⠀⠀⠀⣼⠇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣯⠌⠀⠀⠀⢳⠀⠀⠀⠀⠀⢠⠧⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⢇⠀⢀⡔⠋⠻⠚⣆⢀⣀⡠⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣄⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠳⡝⠆⠀⠀⠀⠁⡧⠆⠈⢣⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢹⡄⠉⠉⠉⠒⠢⢄⡀⠀⠀⠀⠀⠀⢹⣼⡀⢀⣀⠜⠃⠀⠀⢺⡃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
@@ -126,9 +142,9 @@ export default function HomePage() {
         <div className="max-w-md mx-auto text-center">
           <h2 className="text-xl font-semibold mb-4">hyped by vcs at</h2>
           <div className="flex flex-row justify-center items-center gap-8">
-            <Image src="/ef.webp" alt="Entrepreneur First" width={50} height={50} className="h-8 w-auto object-contain grayscale hover:grayscale-0 transition duration-1000 ease-in-out" />
-            <Image src="/projecteurope.jpg" alt="Project Europe" width={50} height={50} className="h-8 w-auto object-contain grayscale hover:grayscale-0 transition duration-1000 ease-in-out" />
-            <Image src="/yc.png" alt="Y Combinator" width={50} height={50} className="h-8 w-auto object-contain grayscale hover:grayscale-0 transition duration-1000 ease-in-out" />
+            <Image src="/ef.webp" alt="Entrepreneur First" width={50} height={50} className="h-8 w-auto object-contain grayscale hover:grayscale-0 transition duration-500 ease-in-out" />
+            <Image src="/projecteurope.jpg" alt="Project Europe" width={50} height={50} className="h-8 w-auto object-contain grayscale hover:grayscale-0 transition duration-500 ease-in-out" />
+            <Image src="/yc.png" alt="Y Combinator" width={50} height={50} className="h-8 w-auto object-contain grayscale hover:grayscale-0 transition duration-500 ease-in-out" />
           </div>
         </div>
       </section>
@@ -146,6 +162,9 @@ export default function HomePage() {
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-3">
+              {errorMessage && (
+                <div className="text-xs text-red-500 mb-2">{errorMessage}</div>
+              )}
               <Input
                 type="email"
                 placeholder="your email address"
