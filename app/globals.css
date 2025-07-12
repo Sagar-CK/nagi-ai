@@ -28,6 +28,7 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --nagi-primary: var(--nagi-primary);
   --font-sans: var(--font-inter);
   --font-mono: monospace;
   --color-sidebar-ring: var(--sidebar-ring);
@@ -66,6 +67,7 @@
 }
 
 :root {
+  --nagi-primary: #50A2FF;
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -101,6 +103,7 @@
 }
 
 .dark {
+  --nagi-primary: #50A2FF;
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.205 0 0);

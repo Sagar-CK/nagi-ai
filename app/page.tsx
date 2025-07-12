@@ -80,11 +80,11 @@ export default function HomePage() {
         <div className="max-w-4xl mx-auto flex items-center justify-between">
           <div className="flex items-center space-x-3">
             {/* Sakura Tree SVG Word Art */}
-            <span className="text-2xl font-bold text-blue-400" aria-label="sakura tree">
+            <span className="text-2xl font-bold text-[var(--nagi-primary)]" aria-label="sakura tree">
               {/* Simple Sakura Tree SVG */}
               ༄
             </span>
-            <span className="text-xl font-semibold">nagi <span className="text-blue-400">ai</span></span>
+            <span className="text-xl font-semibold">nagi <span className="text-[var(--nagi-primary)]">ai</span></span>
           </div>
         </div>
       </header>
@@ -94,7 +94,7 @@ export default function HomePage() {
         <div className="relative flex flex-col items-center justify-center w-full max-w-2xl min-h-[60vh] sm:min-h-[70vh] md:min-h-[80vh] mx-auto">
           {/* Flower ASCII Art as background */}
           <pre
-            className="absolute inset-0 flex flex-col gap-y-2 justify-center items-center w-full h-full text-[8px] xs:text-xs sm:text-base md:text-lg leading-3 sm:leading-4 text-blue-400 whitespace-pre mt-8 sm:mt-10 opacity-80 pointer-events-none select-none z-0"
+            className="absolute inset-0 flex flex-col gap-y-2 justify-center items-center w-full h-full text-[8px] xs:text-xs sm:text-base md:text-lg leading-3 sm:leading-4 text-[var(--nagi-primary)] whitespace-pre mt-8 sm:mt-10 opacity-80 pointer-events-none select-none z-0"
             aria-hidden="true"
           >
             {`
@@ -129,7 +129,7 @@ export default function HomePage() {
           <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[220px] h-[220px] xs:w-[320px] xs:h-[320px] sm:w-[500px] sm:h-[500px] md:w-[700px] md:h-[700px] pointer-events-none z-10" style={{ background: 'radial-gradient(circle, rgba(59,130,246,0.35) 0%, rgba(255,255,255,0) 55%)', filter: 'blur(60px)' }} />
           {/* Heading and subtitle (no card styles) */}
           <div className="relative z-20 flex flex-col items-center justify-center w-full">
-            <h1 className="text-3xl xs:text-4xl sm:text-5xl md:text-7xl font-extrabold mb-3 sm:mb-4 tracking-tight drop-shadow- w-full">nagi <span className="text-blue-400">ai</span></h1>
+            <h1 className="text-3xl xs:text-4xl sm:text-5xl md:text-7xl font-extrabold mb-3 sm:mb-4 tracking-tight drop-shadow- w-full">nagi <span className="text-[var(--nagi-primary)]">ai</span></h1>
             <p className="text-sm xs:text-base sm:text-lg md:text-xl text-black font-light mb-0 w-full">the next big ai company</p>
           </div>
         </div>
@@ -150,13 +150,13 @@ export default function HomePage() {
       </section>
 
       {/* Waitlist Section */}
-      <section id="waitlist" className="py-8 px-6 bg-blue-50/60">
+      <section id="waitlist" className="py-8 px-6 bg-[var(--nagi-primary)]/10">
         <div className="max-w-md mx-auto text-center">
           <h2 className="text-xl font-semibold mb-2">secure your spot</h2>
           <p className="text-sm text-gray-600 mb-4">early access is limited. don’t miss out on the next big thing in ai.</p>
           {isSubmitted ? (
-            <div className="bg-white rounded-lg p-6 border border-blue-200">
-              <div className="text-blue-400 mb-2 text-lg">🤘</div>
+            <div className="bg-white rounded-lg p-6 border border-[var(--nagi-primary)]">
+              <div className="text-[var(--nagi-primary)] mb-2 text-lg">🤘</div>
               <h3 className="text-xs font-semibold mb-1">welcome to the journey</h3>
               <p className="text-xs text-gray-600">we&apos;ll be in touch soon</p>
             </div>
@@ -171,12 +171,12 @@ export default function HomePage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="text-center border-gray-300 focus:border-blue-400 focus:ring-blue-400"
+                className="text-center border-gray-300 focus:border-[var(--nagi-primary)] focus:ring-[var(--nagi-primary)]"
               />
               <Button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-blue-400 hover:bg-blue-500 text-white border-0"
+                className="w-full bg-[var(--nagi-primary)]/80 hover:bg-[var(--nagi-primary)] text-white border-0"
               >
                 {isSubmitting ? "joining..." : "join waitlist"}
               </Button>
@@ -196,7 +196,7 @@ export default function HomePage() {
               { label: "seconds", value: timeLeft.seconds },
             ].map((item) => (
               <div key={item.label} className="bg-gray-50 border border-gray-200 rounded-md p-2">
-                <div className="text-xl font-bold text-blue-400">{item.value}</div>
+                <div className="text-xl font-bold text-[var(--nagi-primary)]">{item.value}</div>
                 <div className="text-xs text-gray-500 uppercase">{item.label}</div>
               </div>
             ))}
@@ -212,8 +212,8 @@ export default function HomePage() {
       <footer className="py-6 px-6 border-t border-gray-100 text-center text-xs text-gray-400">
         © 2025 nagi ai. crafted with intention.
         <div className="flex flex-row  justify-center items-center gap-2">
-          <a href="https://x.com/SagarCK04" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">sagar</a>
-          <a href="https://x.com/eedrareti" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">reti</a>
+          <a href="https://x.com/SagarCK04" target="_blank" rel="noopener noreferrer" className="text-[var(--nagi-primary)] hover:underline">sagar</a>
+          <a href="https://x.com/eedrareti" target="_blank" rel="noopener noreferrer" className="text-[var(--nagi-primary)] hover:underline">reti</a>
         </div>
       </footer>
     </div>
