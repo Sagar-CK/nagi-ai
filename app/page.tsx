@@ -1,30 +1,30 @@
 "use client"
 
-import type React from "react"
-import { useState, useEffect } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { createClient } from "@supabase/supabase-js"
+import { Inter } from "next/font/google"
 import Image from "next/image"
+import { useEffect, useState } from "react"
+import { motion } from "motion/react"
+import { WaitlistForm } from "@/components/waitlist-form"
+import { LogoCarouselDemo } from "@/components/ui/logo-carousel-demo"
+import { HeroBadgeBasic } from "@/components/ui/hero-badge-demo"
+import { FeaturesSection } from "@/components/features-section"
+import { AnimatedGridPattern } from "@/components/ui/animated-grid-pattern"
+import { fadeInUp, staggerContainer } from "@/lib/animations"
 
-const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
+const inter = Inter({ subsets: ["latin"] })
 
-export default function HomePage() {
-  const [email, setEmail] = useState("")
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [isSubmitted, setIsSubmitted] = useState(false)
+export default function Home() {
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
     minutes: 0,
     seconds: 0,
   })
-  const [errorMessage, setErrorMessage] = useState("")
-
-  // Countdown to a future date (30 days from now for demo)
-  const targetDate = new Date(2025, 6, 24)
 
   useEffect(() => {
+    // Countdown to a future date (30 days from now for demo)
+    const targetDate = new Date(2025, 7, 10)
+
     const timer = setInterval(() => {
       const now = new Date().getTime()
       const distance = targetDate.getTime() - now
@@ -41,181 +41,148 @@ export default function HomePage() {
     return () => clearInterval(timer)
   }, [])
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsSubmitting(true)
-    setErrorMessage("")
-    try {
-      const { error } = await supabase.from("waitlist").insert([{ email, created_at: new Date().toISOString() }])
-      if (error) throw error
-      setIsSubmitted(true)
-      setEmail("")
-    } catch (error: unknown) {
-      let code = undefined;
-      let message = "";
-      if (typeof error === "object" && error !== null) {
-        // @ts-expect-error: supabase error shape
-        code = error.code;
-        // @ts-expect-error: supabase error shape
-        message = error.message;
-      }
-      if (
-        code === "23505" ||
-        (typeof message === "string" && message.toLowerCase().includes("duplicate"))
-      ) {
-        setErrorMessage("You are already signed up! 🤘")
-      } else {
-        setErrorMessage("Something went wrong. Please try again later.")
-      }
-      console.error("Error:", error)
-    } finally {
-      setIsSubmitting(false)
-    }
-  }
+
 
   return (
-    <div className="min-h-screen bg-white text-gray-900 font-sans flex flex-col gap-y-10 md:gap-y-20">
-      {/* Header */}
-      <header className="absolute w-full border-b border-gray-100 py-4 px-6 bg-white">
-        <div className="max-w-4xl mx-auto flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            {/* Sakura Tree SVG Word Art */}
-            <span className="text-2xl font-bold text-[var(--nagi-primary)]" aria-label="sakura tree">
-              {/* Simple Sakura Tree SVG */}
-              ༄
-            </span>
-            <span className="text-xl font-semibold">nagi <span className="text-[var(--nagi-primary)]">ai</span></span>
-          </div>
-        </div>
-      </header>
-
+    <div className={`${inter.className} min-h-screen bg-white text-black`}>
       {/* Hero Section */}
-      <section className="flex flex-1 min-h-[100svh] items-center justify-center px-2 sm:px-6 text-center relative">
-        <div className="relative flex flex-col items-center justify-center w-full max-w-2xl min-h-[60vh] sm:min-h-[70vh] md:min-h-[80vh] mx-auto">
-          {/* Flower ASCII Art as background */}
-          <pre
-            className="absolute inset-0 flex flex-col gap-y-2 justify-center items-center w-full h-full text-[8px] xs:text-xs sm:text-base md:text-lg leading-3 sm:leading-4 text-[var(--nagi-primary)] whitespace-pre mt-8 sm:mt-10 opacity-80 pointer-events-none select-none z-0"
-            aria-hidden="true"
-          >
-            {`
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣤⣤⣤⣤⣄⡀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣶⣿⣿⣿⣿⣿⣿⣿⣿⣦⡄⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢰⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣆⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣠⣤⣤⣤⣤⣄⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣤⣴⡿⠟⠛⠋⠉⠉⢩⣍⠛⠛⠿⣷⣤⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣾⠿⠋⠁⠀⠀⠀⠀⠀⠀⣿⣿⠀⣰⡄⠈⠻⣿⣆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢹⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡟⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⡿⠟⠁⢀⣠⣤⣀⣀⣀⣴⣿⣿⣿⣿⣿⣿⣿⡆⠀⣿⣿⣆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠟⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣴⡿⠋⠀⠀⢠⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠞⠛⠛⢿⣿⣶⣦⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠙⠻⠿⠿⠿⠿⠟⠋⠁⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⢀⣠⣾⠟⠋⠀⠀⠀⠀⠈⢿⣿⣿⠿⣿⠏⣸⡿⠁⣿⠟⠉⣿⣿⣠⣴⣤⣀⣀⣿⣿⣿⣿⣷⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⢀⣀⣠⣤⣾⠿⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠙⢿⣤⡞⠀⡿⠁⣴⠃⣠⡾⢿⣿⣿⣿⣿⣿⡿⠋⣠⣿⣿⡿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠻⠛⠋⠉⠀⠀⣠⣤⣄⣀⠀⠀⠀⠀⠀⠀⠀⠈⠻⣷⣴⣧⣼⡏⢰⡏⠀⣼⣿⠿⠿⢿⣿⣇⢰⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⢿⣿⡛⠻⣷⡄⠀⠀⣼⣿⡿⠃⣠⣿⣿⣿⣿⣷⣿⠀⣼⡟⠁⠀⠀⢀⠘⢿⣿⣿⣿⠿⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⡾
-⠀⢀⣴⣶⣶⣦⣄⡀⣹⣿⣾⠟⠿⡆⠀⢻⣿⣿⣿⣿⣿⣿⣿⣿⡿⣿⠀⣿⡇⠀⠀⠀⢿⡿⢸⣿⣿⣥⣤⣼⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣾⠟⠁
-⢠⣿⣿⣿⣿⣿⣿⣿⡿⢿⣿⣷⣶⣿⣦⣈⠙⣻⣿⣿⣿⣿⣿⣿⡀⢿⡆⣿⡇⠀⠀⠀⠀⠀⠘⠿⠿⠟⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣾⠟⠁⠀⠀
-⠸⣿⣿⣿⣿⣿⣿⣿⣇⠀⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⡘⢿⣿⣿⡄⠀⠀⠀⢠⣴⣷⣦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣾⠟⠁⠀⠀⢠⡿
-⠀⢿⣿⣿⡿⠻⣿⣿⣿⣿⣌⠻⣯⠻⣿⣿⣿⣿⡿⠟⠉⠀⠀⠀⠉⠻⣿⣿⣿⣿⣦⡀⠀⠘⢿⣿⡿⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣾⠟⠁⠀⠀⠀⣰⠿⣷
-⠀⠈⠻⣿⣷⣤⣿⣿⣿⣿⣿⣷⣼⣿⣾⣿⡿⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⢿⣿⣿⣿⣦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣶⡿⠋⠀⠀⢀⣠⣴⣿⢿⣦⣤
-⠀⠀⠀⠘⠻⣿⣿⣿⣿⣿⣿⣿⣿⡿⠟⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠻⢿⣿⣿⣶⣤⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⣴⣾⡿⠛⠁⠀⠀⢀⣴⣿⣿⣿⣿⣾⠟⠉
-⠀⠀⠀⠀⠀⠀⠉⠛⠛⠛⠛⠋⠁⢀⡀⠀⠀⠀⠀⠀⢀⣤⣶⠀⠀⣀⣀⣀⡀⠀⠀⢠⡈⠛⠻⠿⣿⣿⣿⣿⣷⣶⣶⣾⣿⣿⡿⠿⠛⠋⠁⠀⣴⣶⡾⠟⠋⢁⣀⣽⣿⠟⣡⣶⣿
-⠀⠀⠀⢠⣤⣄⠀⠀⢀⡀⠀⠀⠀⠸⣿⣧⠀⠰⠶⠿⠛⠋⠁⠀⣴⣿⣿⣿⣿⣷⣄⠘⢿⣄⢸⣿⣶⣬⣉⠉⠉⠉⠉⠉⠉⠀⠀⠀⠀⠀⠀⠀⢀⣤⣶⣾⣿⣿⡿⠛⢡⣾⡿⠟⢋
-⠀⠀⠀⠀⠙⢿⣿⣿⢋⣡⣶⣦⡀⠀⠈⠿⠃⣀⠀⢠⣶⣤⣀⣰⣿⠀⢹⣟⠻⣿⣿⣷⣄⠉⢿⣿⠛⠿⣮⡻⢦⣄⣀⣀⣴⣶⣶⣶⣶⣦⣀⣿⣿⣯⣉⣉⠉⢀⣀⣀⣈⣉⣀⣠⣿
-⠀⠀⢀⣤⣶⣿⣿⠟⢻⣿⠋⢈⣿⣶⣤⡶⠿⠛⢀⣾⣿⣿⣿⡿⣿⡄⠀⢻⡄⠈⠻⣿⣿⣿⣿⣿⣷⣤⣈⠛⠀⠙⠻⣿⣿⣧⣌⣿⣿⠿⣿⠟⠻⠿⠛⠋⠐⠿⠿⠿⠟⠛⢛⣉⣉
-⠀⠀⣿⣿⣿⡿⠁⠀⢸⣿⣶⣾⣿⣿⣿⣿⣶⠾⠛⠋⠉⠛⢿⣷⣶⣿⣶⠀⠁⠲⣤⡈⠛⢿⣿⣿⣿⣿⣿⣿⣷⣶⣶⣿⣿⣿⣿⣿⣿⠿⠛⢀⣠⣤⣶⣶⡶⠶⠿⠿⠿⠿⠿⠿⢿
-⠀⠀⣿⣿⡿⠁⠀⠀⠀⠙⣿⣿⣿⣿⣿⣿⣄⣠⣴⣿⣿⣿⣿⣿⣿⣿⡿⠀⣠⣤⣬⡙⠲⠤⢿⣿⣿⣿⣿⣿⠿⠿⠿⠟⠛⢛⣉⣁⠀⢀⣶⣿⣋⣉⣀⣀⣀⣀⣠⣤⣤⣤⣤⣤⣤
-⠀⠀⠘⠛⠁⠀⠀⠀⠀⠀⠛⠛⠛⠛⠛⠛⠛⠛⠋⠉⠀⠀⠉⠛⠛⠘⠛⠚⠛⠛⠛⠛⠀⠀⠀⠀⠀⠀⠐⠚⠓⠚⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛⠛`}
-            <span className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl leading-none block bounce-arrow font-light mt-4">↓</span>
-          </pre>
-          {/* Deep radial blur background behind heading and subtitle */}
-          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[220px] h-[220px] xs:w-[320px] xs:h-[320px] sm:w-[500px] sm:h-[500px] md:w-[700px] md:h-[700px] pointer-events-none z-10" style={{ background: 'radial-gradient(circle, rgba(59,130,246,0.35) 0%, rgba(255,255,255,0) 55%)', filter: 'blur(60px)' }} />
-          {/* Heading and subtitle (no card styles) */}
-          <div className="relative z-20 flex flex-col items-center justify-center w-full">
-            <h1 className="text-3xl xs:text-4xl sm:text-5xl md:text-7xl font-extrabold mb-3 sm:mb-4 tracking-tight drop-shadow- w-full">nagi <span className="text-[var(--nagi-primary)]">ai</span></h1>
-            <p className="text-sm xs:text-base sm:text-lg md:text-xl text-black font-light mb-0 w-full">the next big ai company</p>
+      <section className="flex min-h-screen flex-col items-center justify-center px-4 text-center relative overflow-hidden">
+        <div className="max-w-4xl relative z-10">
+          <div className="mb-10">
+            <HeroBadgeBasic />
           </div>
-        </div>
-      </section>
-
-
-
-      {/* Hyped by VCs Section */}
-      <section className="py-2 px-6">
-        <div className="max-w-md mx-auto text-center">
-          <h2 className="text-xl font-semibold mb-4">hyped by investors at</h2>
-          <div className="flex flex-row justify-center items-center gap-8">
-            <Image src="/ef.webp" alt="Entrepreneur First" width={50} height={50} className="h-8 w-auto object-contain grayscale hover:grayscale-0 transition duration-300 ease-in-out" />
-            <Image src="/projecteurope.jpg" alt="Project Europe" width={50} height={50} className="h-8 w-auto object-contain grayscale hover:grayscale-0 transition duration-300 ease-in-out" />
-            <Image src="/yc.png" alt="Y Combinator" width={50} height={50} className="h-8 w-auto object-contain grayscale hover:grayscale-0 transition duration-300 ease-in-out" />
+          <div className="relative inline-block">
+            <h1 className="mb-6 text-6xl font-light tracking-tight md:text-8xl relative z-10">
+              nagi
+            </h1>
           </div>
+          <p className="mb-12 text-xl font-light text-gray-600 md:text-2xl relative z-10">
+            AI search visibility for marketing teams
+          </p>
         </div>
+        
+        {/* Animated Grid Pattern Background */}
+        <AnimatedGridPattern
+          numSquares={40}
+          maxOpacity={0.08}
+          duration={4}
+          className="absolute inset-0 z-0 [mask-image:radial-gradient(800px_circle_at_center,white,transparent)]"
+        />
       </section>
+      <div className="flex flex-col items-center justify-center gap-16 pt-24">
+        {/* Features Section - FIRST */}
+        <FeaturesSection />
 
-      {/* Waitlist Section */}
-      <section id="waitlist" className="py-8 px-6 bg-[var(--nagi-primary)]/10">
-        <div className="max-w-md mx-auto text-center">
-          <h2 className="text-xl font-semibold mb-2">secure your spot</h2>
-          <p className="text-sm text-gray-600 mb-4">early access is limited. don’t miss out on the next big thing in ai.</p>
-          {isSubmitted ? (
-            <div className="bg-white rounded-lg p-6 border border-[var(--nagi-primary)]">
-              <div className="text-[var(--nagi-primary)] mb-2 text-lg">🤘</div>
-              <h3 className="text-xs font-semibold mb-1">welcome to the journey</h3>
-              <p className="text-xs text-gray-600">we&apos;ll be in touch soon</p>
+        <LogoCarouselDemo />
+
+        {/* Waitlist Section */}
+        <section id="waitlist" className="py-16 px-6 w-full relative overflow-hidden">
+          <div className="max-w-container mx-auto relative">
+            {/* Glow effect background */}
+            <div className="absolute inset-0 bg-gradient-to-br from-orange-50 to-gray-50 rounded-2xl shadow-glow animate-fade-in"></div>
+            
+            {/* Content with animation */}
+            <div className="relative z-10 py-12 px-8 animate-scale-in">
+              <WaitlistForm />
             </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="space-y-3">
-              {errorMessage && (
-                <div className="text-xs text-red-500 mb-2">{errorMessage}</div>
-              )}
-              <Input
-                type="email"
-                placeholder="your email address"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="text-center border-gray-300 focus:border-[var(--nagi-primary)] focus:ring-[var(--nagi-primary)]"
-              />
-              <Button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full bg-[var(--nagi-primary)]/80 hover:bg-[var(--nagi-primary)] text-white border-0"
-              >
-                {isSubmitting ? "joining..." : "join waitlist"}
-              </Button>
-            </form>
-          )}
-        </div>
-      </section>
-
-      {/* Countdown Section */}
-      <section id="countdown" className="py-8 px-6">
-        <div className="max-w-md mx-auto text-center">
-          <div className="grid grid-cols-4 gap-2 max-w-xs mx-auto mb-2">
-            {[
-              { label: "days", value: timeLeft.days },
-              { label: "hours", value: timeLeft.hours },
-              { label: "minutes", value: timeLeft.minutes },
-              { label: "seconds", value: timeLeft.seconds },
-            ].map((item) => (
-              <div key={item.label} className="bg-gray-50 border border-gray-200 rounded-md p-2">
-                <div className="text-xl font-bold text-[var(--nagi-primary)]">{item.value}</div>
-                <div className="text-xs text-gray-500 uppercase">{item.label}</div>
-              </div>
-            ))}
           </div>
-        </div>
-      </section>
+        </section>
+
+        {/* Countdown Section */}
+        <motion.section
+          id="countdown"
+          className="pb-24 px-6"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+          viewport={{ once: true }}
+        >
+          <div className="max-w-4xl mx-auto text-center">
+            {/* Tom Image and Description */}
+            <motion.div
+              className="mb-8 flex items-center justify-center gap-6"
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.4, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+              viewport={{ once: true }}
+            >
+              <Image 
+                src="/nagi-logo.svg" 
+                alt="Nagi" 
+                width={80}
+                height={80}
+                className="w-20 h-20 rounded-full object-cover border-2 border-gray-200"
+              />
+              <div className="text-left">
+                <p className="text-sm text-gray-500 mb-2">Nagi AI, your visibility assistant</p>
+                <p className="text-gray-600">
+                  Start tracking your AI search presence in ...
+                </p>
+              </div>
+            </motion.div>
+            <motion.div
+              className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 max-w-lg sm:max-w-2xl mx-auto mb-8"
+              variants={staggerContainer}
+              initial="initial"
+              whileInView="animate"
+              viewport={{ once: true }}
+            >
+              {[
+                { label: "days", value: timeLeft.days },
+                { label: "hours", value: timeLeft.hours },
+                { label: "minutes", value: timeLeft.minutes },
+                { label: "seconds", value: timeLeft.seconds },
+              ].map((item) => (
+                <motion.div
+                  key={item.label}
+                  className="bg-gray-50 border border-gray-200 rounded-lg p-4 sm:p-6 flex flex-col items-center justify-center"
+                  variants={fadeInUp}
+                >
+                  <div className="text-2xl sm:text-3xl md:text-4xl text-orange-300 font-light">{item.value}</div>
+                  <div className="text-sm sm:text-base text-gray-500 uppercase mt-2">{item.label}</div>
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
+        </motion.section>
 
 
-
-
+      </div>
 
       {/* Footer */}
-      <footer className="py-6 px-6 border-t border-gray-100 text-center text-xs text-gray-400">
-        © 2025 nagi ai. crafted with intention.
-        <div className="flex flex-row  justify-center items-center gap-2">
-          <a href="https://x.com/SagarCK04" target="_blank" rel="noopener noreferrer" className="text-[var(--nagi-primary)] hover:underline">sagar</a>
-          <a href="https://x.com/eedrareti" target="_blank" rel="noopener noreferrer" className="text-[var(--nagi-primary)] hover:underline">reti</a>
+      <footer className="py-8 px-6 border-t border-gray-100">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            {/* Logo and Description */}
+            <div className="md:col-span-2">
+              <div className="mb-4">
+                <h3 className="text-lg font-light tracking-tight">nagi</h3>
+                <p className="text-sm text-gray-600 mt-2">AI search visibility for marketing teams</p>
+              </div>
+              <p className="text-xs text-gray-400">© 2025 nagi. track, understand, dominate.</p>
+            </div>
+            
+            {/* Product Links */}
+            <div>
+              <h4 className="text-sm font-medium text-gray-900 mb-3">Product</h4>
+              <ul className="space-y-2">
+                <li><a href="#" className="text-sm text-gray-600 hover:text-gray-900">Early Access</a></li>
+                <li><a href="#waitlist" className="text-sm text-gray-600 hover:text-gray-900">Join Waitlist</a></li>
+              </ul>
+            </div>
+            
+            {/* Connect */}
+            <div>
+              <h4 className="text-sm font-medium text-gray-900 mb-3">Connect</h4>
+              <ul className="space-y-2">
+                <li><a href="https://x.com/SagarCK04" target="_blank" rel="noopener noreferrer" className="text-sm hover:underline">sagar</a></li>
+                <li><a href="https://x.com/eedrareti" target="_blank" rel="noopener noreferrer" className="text-sm hover:underline">reti</a></li>
+              </ul>
+            </div>
+          </div>
         </div>
       </footer>
+
     </div>
   )
 }

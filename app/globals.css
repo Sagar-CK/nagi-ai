@@ -3,34 +3,11 @@
 
 @custom-variant dark (&:is(.dark *));
 
-@keyframes bounce {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  20% {
-    transform: translateY(-10px);
-  }
-  40% {
-    transform: translateY(-20px);
-  }
-  60% {
-    transform: translateY(-10px);
-  }
-  80% {
-    transform: translateY(0);
-  }
-}
-
-.bounce-arrow {
-  animation: bounce 1.2s infinite;
-}
-
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --nagi-primary: var(--nagi-primary);
-  --font-sans: var(--font-inter);
-  --font-mono: monospace;
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -67,7 +44,6 @@
 }
 
 :root {
-  --nagi-primary: #50A2FF;
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -103,7 +79,6 @@
 }
 
 .dark {
-  --nagi-primary: #50A2FF;
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.205 0 0);
@@ -135,6 +110,13 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+}
+
+:root {
+  --nagi-primary: #4285F4;
+  --nagi-secondary: #34A853;
+  --nagi-accent: #FBBC04;
+  --nagi-danger: #EA4335;
 }
 
 @layer base {
